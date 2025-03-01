@@ -45,8 +45,6 @@ export default defineComponent({
     <div class="image-container" v-if="imageSrc">
       <img :src="imageSrc" alt="Uploaded Image" class="uploaded-image" />
     </div>
-    <button class="center-button" @click="triggerFileInput">Upload</button>
-    <input type="file" ref="fileInput" @change="handleFileChange" class="file-input" />
   </div>
 </template>
 

@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import UpperContainer from '../components/UpperContainer.vue'
 import LowerContainer from '../components/LowerContainer.vue';
+
+const goToUserFiles = () => {
+  window.location.href = 'userFiles.html';
+};
 </script>
 
 <template>
   <div class="title">
     <h1>Skissue.com</h1>
-    <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</h3>
+    <h3>Enhanced image with data analysis.</h3>
   </div>
   <div class="image-row-upper">
     <UpperContainer imageDesc="Image 1" boxType="Image" />
@@ -19,7 +23,9 @@ import LowerContainer from '../components/LowerContainer.vue';
     <LowerContainer imageDesc="Image 1" boxType="Image"/>
     <LowerContainer imageDesc="Graph 3" boxType="Graph"/>
   </div>
-  <a href="index.html" class="login-link">Go to Login</a>
+  <div class="top-right-button">
+    <button @click="goToUserFiles">User Files</button>
+  </div>
 </template>
 
 <style scoped>
@@ -64,5 +70,22 @@ h3 {
   font-size: 1.0rem;
   margin: 0; /* Remove default margin */
   color: #E2ADF2;
+}
+
+.top-right-button button {
+  position: absolute;
+  padding: 10px 20px; /* Button padding */
+  color: white; /* Button text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  top: 40px;
+  right: 245px;
+  font-size: 1.2rem;
+  background-color: #ffffff00; 
+}
+
+.top-right-button button:hover {
+  background-color: #ffffff4f; /* Darker green on hover */
 }
 </style>
