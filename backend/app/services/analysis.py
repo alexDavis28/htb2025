@@ -77,7 +77,7 @@ def percent_horizontal(sat_image: cv2.typing.MatLike) -> float:
     horizontal = cv2.erode(bw, horizontal_structure)
     horizontal = cv2.dilate(horizontal, horizontal_structure)
 
-    cv2.imshow("horizontal", horizontal);cv2.waitKey();cv2.destroyAllWindows()
+    # cv2.imshow("horizontal", horizontal);cv2.waitKey();cv2.destroyAllWindows()
     return proportion_image_white(horizontal)
 
 def percent_vertical(sat_image: cv2.typing.MatLike) -> float:
