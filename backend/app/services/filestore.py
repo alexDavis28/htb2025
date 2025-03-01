@@ -1,9 +1,10 @@
 from typing import Optional, Tuple
+from hashlib import sha256
 import os
 
 try: ## support file testing
     from ..conf import CONFIG 
-    from ..main import log
+    from .logs import log
 except ImportError:
     CONFIG = {'db': 'htb25.testing.db'} # type: ignore
     import logs
@@ -28,6 +29,7 @@ class FileStore:
     
     def get_file(self, filehash: str) -> Optional[bytes]:
         file_path = os.path.join(self.__filestore_path, filehash)
+        log.debug("FileStore get", f"Getting file {filehash}")
         if not os.path.exists(file_path):
             log.warn("FileStore get", f"File {filehash} not found")
             return None
@@ -44,7 +46,9 @@ class FileStore:
         - bool: if we wrote to the store, to prevent duplicate copys of the same file
         - str | None: if the file was saved, the filehash, else None ie error
     """
-    def save_file(self, filehash: str, data: bytes) -> Tuple[bool, (str | None)]:
+    def save_file(self, data: bytes) -> Tuple[bool, (str | None)]:
+        filehash:str = sha256(data).hexdigest()
+
         file_path = os.path.join(self.__filestore_path, filehash)
 
         if os.path.exists(file_path): return False, filehash # dont need to save the file again
