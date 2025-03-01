@@ -33,7 +33,7 @@ def analyse_image(sat_image_path: str, lidar_image_path: str) -> dict:
     # Check against thresholds
     pass
 
-def proportion_image_white(image) -> float:
+def proportion_image_white(image: cv2.typing.MatLike) -> float:
     height, width = image.shape[:2]
     total_pixels = height * width
     count_white = np.count_nonzero(image)
@@ -78,8 +78,7 @@ def percent_horizontal(sat_image: cv2.typing.MatLike) -> float:
     horizontal = cv2.dilate(horizontal, horizontal_structure)
 
     cv2.imshow("horizontal", horizontal);cv2.waitKey();cv2.destroyAllWindows()
-    percentage: float = cv2.countNonZero(horizontal) / (sat_image.shape[0] * sat_image.shape[1])
-    return percentage
+    return proportion_image_white(horizontal)
 
 def percent_vertical(sat_image: cv2.typing.MatLike) -> float:
     # Transform the image to grayscale
@@ -95,5 +94,4 @@ def percent_vertical(sat_image: cv2.typing.MatLike) -> float:
     
     vertical = cv2.erode(bw, vertical_structure)
     vertical = cv2.dilate(vertical, vertical_structure)
-    percentage: float = cv2.countNonZero(vertical) / (sat_image.shape[0] * sat_image.shape[1])
-    return percentage
+    return proportion_image_white(vertical)
