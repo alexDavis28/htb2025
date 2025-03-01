@@ -65,6 +65,7 @@ def edge_density(sat_image: cv2.typing.MatLike) -> float:
     # Apply Canny edge detection to the satellite image
     edges: cv2.typing.MatLike = cv2.Canny(sat_image, 100, 200)
 
+    cv2.imshow("edges", edges);cv2.waitKey();cv2.destroyAllWindows()
     # Pixels which are edges are marked as 1, all other pixels are marked as 0.
     edge_density: float = cv2.countNonZero(edges) / (sat_image.shape[0] * sat_image.shape[1])
     return edge_density
@@ -72,36 +73,38 @@ def edge_density(sat_image: cv2.typing.MatLike) -> float:
 
 def percent_horizontal(sat_image: cv2.typing.MatLike) -> float:
     # Transform the image to grayscale
-    gray_image = cv2.cvtColor(sat_image, cv2.COLOR_BGR2GRAY)
+    gray_image: cv2.typing.MatLike = cv2.cvtColor(sat_image, cv2.COLOR_BGR2GRAY)
     
     gray_image = cv2.bitwise_not(gray_image)
-    bw = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, \
+    bw: cv2.typing.MatLike = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, \
                                 cv2.THRESH_BINARY, 15, -2)
     
     cols: int = bw.shape[1]
-    horizontal_size = cols // 30
-    horizontal_structure = cv2.getStructuringElement(cv2.MORPH_RECT, (horizontal_size, 1))
+    horizontal_size: int = cols // 30
+    horizontal_structure: cv2.typing.MatLike = cv2.getStructuringElement(cv2.MORPH_RECT, (horizontal_size, 1))
     
     horizontal = cv2.erode(bw, horizontal_structure)
     horizontal = cv2.dilate(horizontal, horizontal_structure)
 
+    cv2.imshow("horizontal", horizontal);cv2.waitKey();cv2.destroyAllWindows()
     percentage: float = cv2.countNonZero(horizontal) / (sat_image.shape[0] * sat_image.shape[1])
     return percentage
 
 def percent_vertical(sat_image: cv2.typing.MatLike) -> float:
     # Transform the image to grayscale
-    gray_image = cv2.cvtColor(sat_image, cv2.COLOR_BGR2GRAY)
+    gray_image: cv2.typing.MatLike = cv2.cvtColor(sat_image, cv2.COLOR_BGR2GRAY)
     
     gray_image = cv2.bitwise_not(gray_image)
-    bw = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, \
+    bw: cv2.typing.MatLike = cv2.adaptiveThreshold(gray_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, \
                                 cv2.THRESH_BINARY, 15, -2)
     
-    cols: int = bw.shape[1]
-    horizontal_size = cols // 30
-    horizontal_structure = cv2.getStructuringElement(cv2.MORPH_RECT, (horizontal_size, 1))
+    rows: int = bw.shape[0]
+    vertical_size: int = rows // 30
+    vertical_structure = cv2.getStructuringElement(cv2.MORPH_RECT, (vertical_size, 1))
     
-    horizontal = cv2.erode(bw, horizontal_structure)
-    horizontal = cv2.dilate(horizontal, horizontal_structure)
+    vertical = cv2.erode(bw, vertical_structure)
+    vertical = cv2.dilate(vertical, vertical_structure)
+    cv2.imshow("vertical", vertical);cv2.waitKey();cv2.destroyAllWindows()
 
-    percentage: float = cv2.countNonZero(horizontal) / (sat_image.shape[0] * sat_image.shape[1])
+    percentage: float = cv2.countNonZero(vertical) / (sat_image.shape[0] * sat_image.shape[1])
     return percentage
