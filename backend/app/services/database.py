@@ -1,7 +1,6 @@
 from threading import Lock
 import sqlite3 as sql
-from typing import Optional
-from typing import Tuple, Any
+from typing import Optional, Tuple, Any
 from os import path
 
 try: ## support file testing
@@ -15,7 +14,7 @@ except ImportError:
 class DB:
     FILE_TABLE_CREATION: str = """
     CREATE TABLE files (
-        file_id INTEGER PRIMARY KEY, 
+        file_id INTEGER PRIMARY KEY AUTOINCREMENT, 
         name TEXT NOT NULL, 
         hash TEXT NOT NULL
     )
@@ -85,14 +84,16 @@ class DB:
                 cursor.execute(query, params) # type: ignore
                 ret = cursor.fetchone()
                 cursor.close()
-
+                self.__conn.commit()
+                
                 if ret is not None:
                     return (True, ret)
                 else:
                     return (False, ret)
+                
             except Exception as e:
                 log.error("DB", e)
-                return (None, None)
+                return (None, None) 
 
     def table_exists(self, table_name:str) -> bool:
         _, value =  self.__execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
@@ -132,12 +133,14 @@ class DB:
     
     def get_user_name(self, user_id:int) -> Optional[str]:
         suc, result = self.__execute("SELECT username FROM users WHERE user_id=?", (user_id,))
+        log.debug("DB", f"get_user_name {(suc, result)}")
+
         if suc: return result[0]
         return None
     
     def add_user_file(self, user_id:int, file_id:int) -> bool:
         suc, _ = self.__execute("INSERT INTO user_file_system (user_id, file_id) VALUES (?, ?)", (user_id, file_id))
-        return suc == True
+        return suc is not None
 
     ### === FILE TABLE === ###
     def create_file_table(self) -> bool:
@@ -149,20 +152,15 @@ class DB:
         if not ret: log.warn("DB", "Failed to create files table")
         return ret
 
-    def get_number_file_entries(self) -> Optional[int]:
-        suc, result = self.__execute("SELECT COUNT(*) FROM files", None)
-        if suc: return int(result[0])
-        return None
-
     def add_file_record(self, file_name:str, file_hash:str) -> bool:
-        file_id = self.get_number_file_entries()
-        if file_id is None: return False
-
-        suc, _ = self.__execute(
-            "INSERT INTO files (file_id, name, hash) VALUES (?, ?, ?)", 
-            (str(file_id), file_name, file_hash)
+        log.debug("DB", f"Adding file record {file_name} {file_hash}")
+        
+        returnValue, _ = self.__execute(
+            "INSERT INTO files (name, hash) VALUES (?, ?)", 
+            (file_name, file_hash)
         )
-        ret = suc == True
+        log.debug("DB", f"Added file record {(returnValue, _)}")
+        ret = returnValue is not None 
         if not ret: log.warn("DB", f"Failed to add file record {file_name}")
         return ret 
 
