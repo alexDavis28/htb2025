@@ -50,7 +50,6 @@ def percent_green(sat_image: cv2.typing.MatLike):
     # Convert image
     image_hsv = cv2.cvtColor(sat_image, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(image_hsv, lower_green, upper_green)
-    cv2.imshow("green", mask);cv2.waitKey();cv2.destroyAllWindows()
     return proportion_image_white(mask)
 
 
