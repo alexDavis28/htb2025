@@ -19,7 +19,6 @@
 import { ref } from "vue";
 
 const username = ref("");
-const password = ref("");
 
 const handleLogin = async () => {
   if (username.value.trim() !== "") {

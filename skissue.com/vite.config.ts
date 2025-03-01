@@ -7,7 +7,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: "public/index.html", // Login page
-        home: "public/home.html",   // Home page
+        info: "public/info.html",   // Home page
+        userFiles: "public/userFiles.html"
       }
     }
   },

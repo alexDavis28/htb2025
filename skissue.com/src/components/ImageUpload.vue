@@ -2,8 +2,10 @@
     <div class="container">
       <h2 class="header">Optical</h2>
       <div class = "placeholder"></div>
+      <button class="confirm-button" @click="confirmUpload">Confirm</button>
       <h2 class="header">Satellite</h2>
       <div class = "placeholder"></div>
+      <button class="confirm-button" @click="confirmUpload2">Confirm</button>
     </div>
   </template>
   
@@ -24,7 +26,24 @@
       reader.readAsDataURL(file);
     }
   };
-  
+
+  const confirmUpload = () => {
+  if (imageSrc.value) {
+    console.log("Image confirmed:", imageSrc.value);
+    // Add your confirmation logic here
+  } else {
+    console.log("No image to confirm");
+  }
+};
+const confirmUpload2 = () => {
+  window.location.href = "info.html";
+  if (imageSrc.value) {
+    console.log("Image confirmed:", imageSrc.value);
+    // Add your confirmation logic here
+  } else {
+    console.log("No image to confirm");
+  }
+};
   const triggerFileInput = () => {
     fileInput.value?.click();
   };
@@ -47,8 +66,8 @@
   }
 
   .placeholder {
-  width: 200px; /* Width of the placeholder */
-  height: 200px; /* Height of the placeholder */
+  width: 175px; /* Width of the placeholder */
+  height: 175px; /* Height of the placeholder */
   background-color: #000000; /* Black background color */
   border-radius: 20px; /* Curved corners */
   display: flex;
@@ -62,5 +81,25 @@
   max-width: 100%;
   max-height: 100%;
   border-radius: 20px; /* Match the border radius of the placeholder */
+}
+
+.confirm-button {
+  position: relative;
+  left: 150px;
+  padding: 10px 20px; /* Button padding */
+  background-color: #4CAF50; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin-top: 10px; /* Add some margin above the button */
+}
+
+.confirm-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.file-input {
+  display: none; /* Hide the file input */
 }
   </style>

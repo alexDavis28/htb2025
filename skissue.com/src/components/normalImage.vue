@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header-container">
-      <h2 class="header">Header Text</h2>
+      <h2 class="header">User files</h2>
       <button class="center-button" @click="triggerFileInput">Upload</button>
     </div>
     <input type="file" ref="fileInput" @change="handleFileChange" class="file-input" />
@@ -82,19 +82,24 @@ export default defineComponent({
 }
 
 .header {
-  color: white; /* Set the header text color */
-  font-size: 1.5rem; /* Set the header font size */
-  margin-right: 20px; /* Add some margin to the right of the header */
-}
+    margin: 10px 0; /* Add some margin above and below the header */
+    color: white; /* Set the header text color */
+    font-size: 2.0rem; /* Set the header font size */
+    text-align: left; /* Align the header text to the left */
+    width: 100%; /* Ensure the header takes the full width of the container */
+    padding-left: 0px; /* Add some padding to the left */
+  }
+
 
 .center-button {
+  position: relative;
   padding: 10px 20px; /* Button padding */
   background-color: #4CAF50; /* Button background color */
   color: white; /* Button text color */
   border: none; /* Remove default border */
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
-  margin-left: 265px;
+  left: -20px;
 }
 
 .center-button:hover {
