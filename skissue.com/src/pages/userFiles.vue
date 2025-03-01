@@ -1,15 +1,18 @@
 <script setup lang="ts">
+//Ignore the fact that this is named Cnormal container
+//I am halfway insane and i do not want to look for names rn
 import normalContainer from '../components/normalImage.vue'
+import imageUploadfrom from '../components/ImageUpload.vue'
 </script>
 
 <template>
   <div class="title">
     <h1>Skissue.com</h1>
-    <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</h3>
+    <h3>Upload images, then select optical then satellite images to recieve an enhanced image.</h3>
   </div>
   <div class="image-row-upper">
     <normalContainer/>
-    <normalContainer/>
+    <imageUploadfrom/>
   </div>
   <div class="top-right-text">
     <p>Top Right Text</p>
