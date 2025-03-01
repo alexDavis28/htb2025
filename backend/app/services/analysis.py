@@ -55,11 +55,6 @@ def percent_green(sat_image: cv2.typing.MatLike):
 def average_elevation(lidar_image_path: str) -> float:
     pass
 
-
-def percent_water(sat_image_path: str, lidar_image_path: str) -> float:
-    pass
-
-
 def edge_density(sat_image: cv2.typing.MatLike) -> float:
     # Apply Canny edge detection to the satellite image
     edges: cv2.typing.MatLike = cv2.Canny(sat_image, 110, 180)
@@ -100,7 +95,5 @@ def percent_vertical(sat_image: cv2.typing.MatLike) -> float:
     
     vertical = cv2.erode(bw, vertical_structure)
     vertical = cv2.dilate(vertical, vertical_structure)
-    cv2.imshow("vertical", vertical);cv2.waitKey();cv2.destroyAllWindows()
-
     percentage: float = cv2.countNonZero(vertical) / (sat_image.shape[0] * sat_image.shape[1])
     return percentage
