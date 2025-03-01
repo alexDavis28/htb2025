@@ -1,24 +1,30 @@
 from threading import Lock
-from conf import config 
 import sqlite3 as sql
 from typing import Optional
-from ..main import log
 from typing import Tuple, Any
 from os import path
+
+try: ## support file testing
+    from ..conf import CONFIG 
+    from ..main import log
+except ImportError:
+    CONFIG = {'db': 'htb25.testing.db'} # type: ignore
+    import logs
+    log = logs.Logger()
 
 class DB:
     FILE_TABLE_CREATION: str = """
     CREATE TABLE files (
         file_id INTEGER PRIMARY KEY, 
-        name TEXT, 
-        hash TEXT
+        name TEXT NOT NULL, 
+        hash TEXT NOT NULL
     )
     """
     
     USERS_TABLE_CREATION: str = """
     CREATE TABLE users (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        username TEXT
+        username TEXT NOT NULL UNIQUE
     )
     """
     
@@ -35,12 +41,19 @@ class DB:
 
     
     def __init__(self):
-        if not self.create_db_file(config['db']):
-            raise Exception("Failed to create DB file")
-    
-        self.__db_path = config['db']
-        self.__conn = sql.connect(self.__db_path, check_same_thread=False)  
+        self.__db_path = CONFIG['db']
         self.__lock = Lock()
+
+
+        if not self.create_db_file(self.__db_path):
+            raise Exception("Failed to create DB file")
+        
+        self.__conn = sql.connect(self.__db_path, check_same_thread=False)  
+
+
+        if not self.setup_db():
+            raise Exception("Failed to setup DB")
+
 
 
     def __del__(self):
@@ -52,7 +65,7 @@ class DB:
         if path.isfile(db_path): return True
         else : 
             try: 
-                with open(db_path, 'w') as f: pass
+                with open(db_path, 'w') as _: pass
                 return True
             except Exception as e:
                 log.error("DB INIT", e)
@@ -83,28 +96,38 @@ class DB:
 
     def table_exists(self, table_name:str) -> bool:
         _, value =  self.__execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
-        return len(value) != 1
+        return len(value) != 0 if value is not None else False
 
     ### === USER TABLE === ###
     def create_user_table(self) -> bool:
         if self.table_exists("users"): return True
 
-        suc, _ =  self.__execute(self.USERS_TABLE_CREATION)
-        return suc == True
+        return_indicator, _ =  self.__execute(self.USERS_TABLE_CREATION)
+        ret = return_indicator is not None
+        if not ret: log.warn("DB", "Failed to create users table")
+        return  ret 
     
     def create_user_file_system_table(self) -> bool:
         if self.table_exists("user_file_system"): return True
 
-        suc, _ =  self.__execute(self.USER_FILE_SYSTEM_TABLE_CREATION)
-        return suc == True
+        return_indicator, _ =  self.__execute(self.USER_FILE_SYSTEM_TABLE_CREATION)
+
+        ret = return_indicator is not None
+        if not ret: log.warn("DB", "Failed to create user_file_system table")
+        return ret
     
     def add_user(self, username:str) -> bool:
         suc, _ = self.__execute("INSERT INTO users (username) VALUES (?)", (username,))
-        return suc == True
+
+        ret = suc == True
+        if not ret: log.warn("DB", f"Failed to add user {username}")
+        return ret
     
     def get_user_id(self, username:str) -> Optional[int]:
         suc, result = self.__execute("SELECT user_id FROM users WHERE username=?", (username,))
         if suc: return int(result[0])
+
+        log.warn("DB", f"Failed to get user_id for {username}")
         return None
     
     def get_user_name(self, user_id:int) -> Optional[str]:
@@ -120,8 +143,11 @@ class DB:
     def create_file_table(self) -> bool:
         if self.table_exists("files"): return True
 
-        suc, _ =  self.__execute(self.FILE_TABLE_CREATION)
-        return suc == True
+        return_indicator, _ =  self.__execute(self.FILE_TABLE_CREATION)
+
+        ret = return_indicator is not None
+        if not ret: log.warn("DB", "Failed to create files table")
+        return ret
 
     def get_number_file_entries(self) -> Optional[int]:
         suc, result = self.__execute("SELECT COUNT(*) FROM files", None)
@@ -136,19 +162,45 @@ class DB:
             "INSERT INTO files (file_id, name, hash) VALUES (?, ?, ?)", 
             (str(file_id), file_name, file_hash)
         )
-        return suc == True
+        ret = suc == True
+        if not ret: log.warn("DB", f"Failed to add file record {file_name}")
+        return ret 
 
     def get_file_record(self, file_id:int) -> Optional[Tuple[str, str]]:
         suc, result = self.__execute("SELECT name, hash FROM files WHERE file_id=?", (file_id,))
         if suc: return (result[0], result[1])
+        log.warn("DB", f"Failed to get file record for {file_id}")
         return None
     
     def get_file_id(self, file_hash:str) -> Optional[int]:
         suc, result = self.__execute("SELECT file_id FROM files WHERE hash=?", (file_hash,))
         if suc: return int(result[0])
+        log.warn("DB", f"Failed to get file_id for {file_hash}")
         return None
     
 
-    
+if __name__ == "__main__":
+    db = DB()
+    db.add_user("test")
+    db.add_user("test2")
+    db.add_user("test")
 
+    db.add_file_record("test", "hash")
+    db.add_file_record("test2", "hash2")
+    db.add_file_record("test", "hash")
 
+    print(db.get_user_id("test"))
+    print(db.get_user_id("test2"))
+    print(db.get_user_id("test3"))
+
+    print(db.get_user_name(1))
+    print(db.get_user_name(2))
+    print(db.get_user_name(3))
+
+    print(db.get_file_id("hash"))
+    print(db.get_file_id("hash2"))
+    print(db.get_file_id("hash3"))
+
+    print(db.get_file_record(1))
+    print(db.get_file_record(2))
+    print(db.get_file_record(3))
