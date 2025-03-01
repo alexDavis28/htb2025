@@ -37,7 +37,6 @@ def proportion_image_white(image) -> float:
     height, width = image.shape[:2]
     total_pixels = height * width
     count_white = np.count_nonzero(image)
-    print(count_white, total_pixels)
     return count_white / total_pixels
  
 def percent_green(sat_image: cv2.typing.MatLike):
