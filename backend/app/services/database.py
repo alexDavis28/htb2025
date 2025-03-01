@@ -4,6 +4,7 @@ import sqlite3 as sql
 from typing import Optional
 from ..main import log
 from typing import Tuple, Any
+from os import path
 
 class DB:
     FILE_TABLE_CREATION: str = """
@@ -34,14 +35,33 @@ class DB:
 
     
     def __init__(self):
+        if not self.create_db_file(config['db']):
+            raise Exception("Failed to create DB file")
+    
         self.__db_path = config['db']
         self.__conn = sql.connect(self.__db_path, check_same_thread=False)  
         self.__lock = Lock()
+
 
     def __del__(self):
         try : self.__conn.close()
         except: pass # Ce'st la vie 
 
+    @staticmethod
+    def create_db_file(db_path:str) -> bool:
+        if path.isfile(db_path): return True
+        else : 
+            try: 
+                with open(db_path, 'w') as f: pass
+                return True
+            except Exception as e:
+                log.error("DB INIT", e)
+                return False
+
+    def setup_db(self) -> bool:
+        return self.create_user_table() and \
+            self.create_file_table() and \
+            self.create_user_file_system_table()
 
     def __execute(self, query:str, params: Tuple[(Any | None), ... ] | None = None) -> Tuple[Optional[bool], Any]:
         if params is None: params = ()  # type: ignore
@@ -60,7 +80,6 @@ class DB:
             except Exception as e:
                 log.error("DB", e)
                 return (None, None)
-
 
     def table_exists(self, table_name:str) -> bool:
         _, value =  self.__execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
@@ -96,7 +115,6 @@ class DB:
     def add_user_file(self, user_id:int, file_id:int) -> bool:
         suc, _ = self.__execute("INSERT INTO user_file_system (user_id, file_id) VALUES (?, ?)", (user_id, file_id))
         return suc == True
-
 
     ### === FILE TABLE === ###
     def create_file_table(self) -> bool:
