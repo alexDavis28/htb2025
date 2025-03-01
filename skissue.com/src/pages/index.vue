@@ -21,10 +21,15 @@ import { ref } from "vue";
 const username = ref("");
 const password = ref("");
 
-const handleLogin = () => {
+const handleLogin = async () => {
   if (username.value.trim() !== "") {
-    console.log("Logging in:", username.value, password.value);
+    console.log("Logging in:", username.value);
     window.location.href = "userFiles.html";
+
+    const message_response = await fetch("/api/login/"+username.value, {
+      method: "GET",
+    });
+    console.log("Response:", message_response);
   } else {
     console.log("Username is empty");
   }
