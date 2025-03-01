@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from conf import config
+from .services.logs import Logger
+
+log = Logger()
 
 app = FastAPI()
 app.config = config # type: ignore
