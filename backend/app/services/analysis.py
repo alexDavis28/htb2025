@@ -62,12 +62,9 @@ def percent_water(sat_image_path: str, lidar_image_path: str) -> float:
 
 def edge_density(sat_image: cv2.typing.MatLike) -> float:
     # Apply Canny edge detection to the satellite image
-    edges: cv2.typing.MatLike = cv2.Canny(sat_image, 100, 200)
-
-    cv2.imshow("edges", edges);cv2.waitKey();cv2.destroyAllWindows()
-    # Pixels which are edges are marked as 1, all other pixels are marked as 0.
-    edge_density: float = cv2.countNonZero(edges) / (sat_image.shape[0] * sat_image.shape[1])
-    return edge_density
+    edges: cv2.typing.MatLike = cv2.Canny(sat_image, 110, 180)
+    # cv2.imshow("edges", edges);cv2.waitKey();cv2.destroyAllWindows()
+    return proportion_image_white(edges)
 
 
 def percent_horizontal(sat_image: cv2.typing.MatLike) -> float:
