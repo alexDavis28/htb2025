@@ -5,7 +5,7 @@ from os import path
 
 try: ## support file testing
     from ..conf import CONFIG 
-    from ..main import log
+    from .logs import log
 except ImportError:
     CONFIG = {'db': 'htb25.testing.db'} # type: ignore
     import logs
@@ -200,7 +200,7 @@ class DB:
             (UID,)
         )
         if res is not None: return [(row[0], row[1]) for row in res]
-        
+
         log.warn("DB", f"Failed to get user files for {UID}")
         return None
          

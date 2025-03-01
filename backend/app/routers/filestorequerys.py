@@ -1,15 +1,23 @@
-from fastapi import HTTPException, Response, Request
+from fastapi import HTTPException, Response, Request, APIRouter
 from fastapi.responses import RedirectResponse
 from fastapi import status
 from pydantic import BaseModel
 
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 
+from .validation import UID_validate, db, filestore
 from ..services.logs import log
-from ..main import app, db, filestore, UID_validate
 
 
-@app.get("/store/{item_hash}")
+router = APIRouter(
+    prefix="/store",
+    tags=["store"],
+
+    responses={404: {"description": "Not found"}},
+)
+
+
+@router.get("/{item_hash}")
 async def read_item(item_hash: str):
     log.debug("Store", f"Getting file {item_hash}")
     file_data = filestore.get_file(item_hash)
@@ -21,7 +29,7 @@ class UploadData(BaseModel):
     data: str
 
 
-@app.post("/store/upload")
+@router.post("/upload")
 async def create_upload(request: Request, response: Response, data: UploadData):
     log.debug("Upload", f"request {request}")
     log.debug("Upload", f"response {response}")

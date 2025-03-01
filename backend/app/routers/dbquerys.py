@@ -1,11 +1,20 @@
-from fastapi import HTTPException, Response, Request
+from fastapi import HTTPException, Response, Request, APIRouter
 from fastapi.responses import RedirectResponse
 from fastapi import status
 
 from ..services.logs import log
-from ..main import app, db, UID_validate
+from .validation import UID_validate, db
 
-@app.get("/api/login/{username}")
+
+router = APIRouter(
+    prefix="/api",
+    tags=["api"],
+
+    responses={404: {"description": "Not found"}},
+)
+
+
+@router.get("/login/{username}")
 async def login(username: str, response: Response):
     log.debug("Login", f"Logging in {username}")
     user_id = db.get_user_id(username)
@@ -13,12 +22,12 @@ async def login(username: str, response: Response):
     response.set_cookie(key="UID", value=str(user_id))
     return RedirectResponse(url="/filelist", status_code=status.HTTP_302_FOUND)
 
-@app.get("/api/logout")
+@router.get("logout")
 async def logout(response: Response):
     response.delete_cookie("UID")
     return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
 
-@app.get("/api/filelist")
+@router.get("/filelist")
 async def filelist(request: Request, response: Response):
     UID = UID_validate(request, response)
     if UID is None: 
