@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import UpperContainer from '../components/UpperContainer.vue'
-import LowerContainer from '../components/LowerContainer.vue';
+import normalContainer from '../components/normalImage.vue'
 </script>
 
 <template>
@@ -9,17 +8,12 @@ import LowerContainer from '../components/LowerContainer.vue';
     <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</h3>
   </div>
   <div class="image-row-upper">
-    <UpperContainer imageDesc="Image 1" boxType="Image" />
-    <UpperContainer imageDesc="Image 2" boxType="Image" />
-    <UpperContainer imageDesc="Graph 1" boxType="Graph" />
-    <UpperContainer imageDesc="Graph 2" boxType="Graph" />
+    <normalContainer/>
+    <normalContainer/>
   </div>
-  <br> <!-- Line break -->
-  <div class="image-row-lower">
-    <LowerContainer imageDesc="Image 1" boxType="Image"/>
-    <LowerContainer imageDesc="Graph 3" boxType="Graph"/>
+  <div class="top-right-text">
+    <p>Top Right Text</p>
   </div>
-  <a href="index.html" class="login-link">Go to Login</a>
 </template>
 
 <style scoped>
@@ -44,13 +38,6 @@ import LowerContainer from '../components/LowerContainer.vue';
   margin-top: 125px; /* Adjust top margin as needed */
 }
 
-.image-row-lower {
-  display: flex;
-  justify-content: flex-start; /* Align items to the left */
-  align-items: flex-start; /* Align items to the top */
-  padding-left: 50px; /* Start from 200px left padding */
-  margin-top: 10px; /* Adjust top margin as needed */
-}
 
 h1 {
   font-weight: 500;
@@ -64,5 +51,14 @@ h3 {
   font-size: 1.0rem;
   margin: 0; /* Remove default margin */
   color: #E2ADF2;
+}
+
+.top-right-text {
+  position: absolute;
+  top: 45px;
+  right: 245px;
+  color: white;
+  font-size: 1.2rem;
+  text-align: right;
 }
 </style>

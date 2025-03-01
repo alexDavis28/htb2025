@@ -6,9 +6,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        home: "public/index.html",
-        login: "public/login.html"
+        index: "public/index.html", // Login page
+        home: "public/home.html",   // Home page
       }
     }
+  },
+  server: {
+    open: "public/index.html" // Ensure Vite opens the login page first
   }
 });
