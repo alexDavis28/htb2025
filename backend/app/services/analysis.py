@@ -33,19 +33,25 @@ def analyse_image(sat_image_path: str, lidar_image_path: str) -> dict:
     # Check against thresholds
     pass
 
-
-def percent_green(sat_image: cv2.typing.MatLike) -> float:
+def proportion_image_white(image) -> float:
+    height, width = image.shape[:2]
+    total_pixels = height * width
+    count_white = np.count_nonzero(image)
+    print(count_white, total_pixels)
+    return count_white / total_pixels
+ 
+def percent_green(sat_image: cv2.typing.MatLike):
     # Define the upper and lower HSV thresholds for green
     # Array (H,S,V)
     # https://stackoverflow.com/questions/10948589/choosing-the-correct-upper-and-lower-hsv-boundaries-for-color-detection-withcv/48367205#48367205
-    lower_green = (35, 100, 20)
-    upper_green = (70, 255, 255)
+    lower_green = (40, 100, 100)
+    upper_green = (100, 255, 255)
 
     # Convert image
     image_hsv = cv2.cvtColor(sat_image, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(image_hsv, lower_green, upper_green)
     cv2.imshow("green", mask);cv2.waitKey();cv2.destroyAllWindows()
-    pass
+    return proportion_image_white(mask)
 
 
 def average_elevation(lidar_image_path: str) -> float:

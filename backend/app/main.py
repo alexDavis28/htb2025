@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .conf import config
+from .conf import CONFIG
 from .services.logs import Logger
 
 log = Logger()
