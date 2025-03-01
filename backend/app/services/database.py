@@ -1,7 +1,6 @@
 from threading import Lock
 import sqlite3 as sql
-from typing import Optional
-from typing import Tuple, Any
+from typing import Optional, Tuple, Any
 from os import path
 
 try: ## support file testing
