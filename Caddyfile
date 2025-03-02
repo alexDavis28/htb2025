@@ -2,5 +2,5 @@ http://skissue.com:2883 {
     redir / /public/ 301
     reverse_proxy /public/* :5080
     reverse_proxy /assets/* :5080
-    reverse_proxy /* :6080
+    reverse_proxy /api/* :6080
 }

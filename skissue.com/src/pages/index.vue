@@ -23,16 +23,20 @@ import { ref } from 'vue';
 import ParticleEffect from '../components/ParticleEffect.vue';
 
 const username = ref('');
+console.log(username);
 
 const handleLogin = async () => {
+  console.log("krill");
   if (username.value.trim() !== '') {
     console.log('Logging in:', username.value);
-    window.location.href = 'userFiles.html';
 
-    const message_response = await fetch('/api/login/' + username.value, {
+    const message_response = await fetch('https://skissue.com/api/login/' + username.value, {
       method: 'GET'
     });
     console.log('Response:', message_response);
+    if (message_response.status == 302) {
+      window.location.href = "userFiles.html";
+    }
   }
 };
 </script>
