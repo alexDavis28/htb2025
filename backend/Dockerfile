@@ -24,4 +24,6 @@ COPY . /app
 
 EXPOSE 80
 
+RUN mkdir /app/data
+
 CMD ["poetry", "run", "fastapi", "run", "app", "--port", "80"]
