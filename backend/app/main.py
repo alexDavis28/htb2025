@@ -9,4 +9,5 @@ app.include_router(filestorequerys.router)
 
 @app.get("/")
 async def root():
-    return RedirectResponse(url="/public/", status_code=301)
+    return "Hello world!"
+    # return RedirectResponse(url="/public/", status_code=301)
