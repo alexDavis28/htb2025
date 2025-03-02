@@ -19,7 +19,23 @@ import { defineComponent, ref } from 'vue';
 
 let urlParams = new URLSearchParams(window.location.search);
 var userID = urlParams.has('user_id'); 
+const loadFiles = async () => {
+  const message_response = await fetch("https://skissue.com/api/filelist/"+userID, {
+    method: 'GET'
+  });
+  const message_json = await message_response.json()
 
+  var files = message_json["files"]
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    var d = document.createElement("div");
+    d.setAttribute("id", file[1]);
+    d.innerHTML = file[0];
+    d.setAttribute("@click", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
+    var list = document.getElementById("file-list");
+    list?.appendChild(d);
+  }
+}
 
 
 export default defineComponent({
@@ -44,23 +60,7 @@ export default defineComponent({
       fileInput.value?.click();
     };
 
-    const loadFiles = async () => {
-  const message_response = await fetch("https://skissue.com/api/filelist/"+userID, {
-    method: 'GET'
-  });
-  const message_json = await message_response.json()
 
-  var files = message_json["files"]
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    var d = document.createElement("div");
-    d.setAttribute("id", file[1]);
-    d.innerHTML = file[0];
-    d.setAttribute("@click", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
-    var list = document.getElementById("file-list");
-    list?.appendChild(d);
-  }
-}
 
     return {
       imageSrc,
