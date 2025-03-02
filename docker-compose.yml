@@ -1,6 +1,6 @@
 version: "3.0"
 services:
-  frontend:
+  backend:
     image: backend:latest
     build: ./backend
     container_name: backend
