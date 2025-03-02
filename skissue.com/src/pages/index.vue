@@ -32,8 +32,9 @@ const registerUser = async () => {
       const message_response = await fetch("https://skissue.com/api/signup/"+username.value, {
         method: 'GET'
       });
+      const message_json = await message_response.json()
       console.log("Response:", message_response);
-      if (message_response.status === 200) {
+      if (message_json !== {}) {
         window.location.href = "userFiles.html";
       }
 
@@ -47,11 +48,10 @@ const handleLogin = async () => {
 
       const message_response = await fetch('https://skissue.com/api/login/' + username.value, {
         method: 'GET',
-        credentials: 'include'
       });
+      const message_json = await message_response.json()
       console.log('Response:', message_response);
-      console.log(message_response.headers.getSetCookie())
-      if (message_response.status === 200) {
+      if (message_response.status !== {}) {
         window.location.href = "userFiles.html";
       }
   }
