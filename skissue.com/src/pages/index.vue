@@ -34,7 +34,7 @@ const handleLogin = async () => {
       method: 'GET'
     });
     console.log('Response:', message_response);
-    if (message_response.status == 302) {
+    if (message_response.status == 200) {
       window.location.href = "userFiles.html";
     }
   }
