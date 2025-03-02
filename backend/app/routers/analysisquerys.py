@@ -1,7 +1,7 @@
 from fastapi import Response, Request, APIRouter
 from ..services import analysis
 
-from .validation import UID_validate, db, filestore # type: ignore
+from .validation import db, filestore # type: ignore
 from ..services.logs import log
 
 
