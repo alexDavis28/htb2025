@@ -6,8 +6,8 @@ from ..services.database import DB
 from ..services.filestore import FileStore
 
 
-db = DB()
 filestore = FileStore()
+db = DB()
 
 def UID_validate(request: Request, response: Response) -> Optional[int]:
     log.debug("UID_validate", f"request {request}")

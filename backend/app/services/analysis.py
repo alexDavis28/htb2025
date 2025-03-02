@@ -1,6 +1,13 @@
+import pickle
 import cv2
 import numpy as np
 from .logs import log
+
+with open("app/data/model.pkl", "rb") as f:
+    # Load the model
+    # Predict: Category 0 Agricultural land 1 Countryside 2 Urban 3 Water
+    # Features: Green percent, edge density, horizontal_percent, vertical_percent
+    clf = pickle.load(f)
 
 
 MatLike = cv2.typing.MatLike
@@ -37,6 +44,11 @@ def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
     # Check against thresholds
     pass
 
+
+def predict_with_model(green_percent: float, edge_density: float, horizontal_percent: float, vertical_percent: float) -> int:
+    return int(clf.predict([[green_percent, edge_density, horizontal_percent, vertical_percent]])[0])
+
+  
 def proportion_image_white(image: MatLike) -> float:
     height, width = image.shape[:2]
     total_pixels = height * width
