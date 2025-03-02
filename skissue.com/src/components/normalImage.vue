@@ -24,7 +24,23 @@ export loadFiles;
     <div class="header-container">
       <h2 class="header">User files</h2>
       <button class="center-button" @click="triggerFileInput">Upload</button>
-      <button type="submit" class="center-button" @click="loadFiles()">Refresh</button>
+      <button type="submit" class="center-button" @click="async () => {
+  const message_response = await fetch("https://skissue.com/api/filelist/"+userID, {
+    method: 'GET'
+  });
+  const message_json = await message_response.json()
+
+  var files = message_json["files"]
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    var d = document.createElement("div");
+    d.setAttribute("id", file[1]);
+    d.innerHTML = file[0];
+    d.setAttribute("@click", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
+    var list = document.getElementById("file-list");
+    list?.appendChild(d);
+  }
+}">Refresh</button>
     </div>
     <input type="file" ref="fileInput" @change="handleFileChange" class="file-input" />
     <div class="curved-square">
