@@ -12,7 +12,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.get("/process/{file_hash}")
+@router.post("/process/{file_hash}")
 def process_file(file_hash: str, request: Request, response: Response):
     log.debug("Analysis", f"{file_hash}")
     a = __import__("base64").b64encode(bytes(file_hash))
