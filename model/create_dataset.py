@@ -1,4 +1,4 @@
-import analysis
+from ..backend.app.services import analysis
 import csv
 import os
 import cv2
