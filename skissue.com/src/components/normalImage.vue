@@ -30,7 +30,7 @@ export const loadFiles = async () => {
     var d = document.createElement("div");
     d.setAttribute("id", file[1]);
     d.innerHTML = file[0];
-    d.setAttribute("@click", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
+    d.setAttribute("onclick", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
     d.setAttribute("class", "individualTile");
     var list = document.getElementById("file-list");
     list?.appendChild(d);
