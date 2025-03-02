@@ -27,7 +27,7 @@ def percent_green(sat_image: cv2.typing.MatLike) -> float:
     # Define the upper and lower HSV thresholds for green
     # Array (H,S,V)
     # https://stackoverflow.com/questions/10948589/choosing-the-correct-upper-and-lower-hsv-boundaries-for-color-detection-withcv/48367205#48367205
-    lower_green: MatLike= (40, 100, 100) # type: ignore
+    lower_green: MatLike= (40, 50, 50) # type: ignore
     upper_green: MatLike = (100, 255, 255) # type: ignore
 
     # Convert image
