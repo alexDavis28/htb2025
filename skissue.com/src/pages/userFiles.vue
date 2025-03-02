@@ -3,9 +3,11 @@
 //I am halfway insane and i do not want to look for names rn
 import normalContainer from '../components/normalImage.vue'
 import imageUploadfrom from '../components/ImageUpload.vue'
+import ParticleEffect from '../components/ParticleEffect.vue';
 </script>
 
 <template>
+  <ParticleEffect />
   <div class="title">
     <h1>Skissue.com</h1>
     <h3>Upload images, then select optical then satellite images to recieve an enhanced image.</h3>

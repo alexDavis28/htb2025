@@ -68,7 +68,7 @@ const confirmUpload2 = () => {
   .placeholder {
   width: 175px; /* Width of the placeholder */
   height: 175px; /* Height of the placeholder */
-  background-color: #000000; /* Black background color */
+  background-color: #44255e; /* Black background color */
   border-radius: 20px; /* Curved corners */
   display: flex;
   position: relative;
