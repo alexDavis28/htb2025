@@ -34,9 +34,7 @@ const registerUser = async () => {
       });
       const message_json = await message_response.json()
       console.log("Response:", message_response);
-      if (message_json != {}) {
-        window.location.href = "userFiles.html?user_id=" + message_json.user_id;
-      }
+      window.location.href = "userFiles.html?user_id=" + message_json.user_id;
 
     }
 }
@@ -51,7 +49,7 @@ const handleLogin = async () => {
       });
       const message_json = await message_response.json()
       console.log('Response:', message_response);
-      if (message_response.status != {}) {
+      if (message_json != {}) {
         window.location.href = "userFiles.html?user_id=" + message_json.user_id;
       }
   }
