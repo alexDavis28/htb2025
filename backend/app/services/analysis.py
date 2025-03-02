@@ -105,7 +105,7 @@ def analyse_image(sat_image_hash: str) -> list[float | str]:
         
     
     # Retrieve model
-    with open("model.pkl", "rb") as file:
+    with open("app/data/model.pkl", "rb") as file:
         clf = pickle.load(file)
 
     # Split image into chunks
