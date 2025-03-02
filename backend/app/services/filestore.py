@@ -48,6 +48,7 @@ class FileStore:
     """
     def save_file(self, data: bytes) -> Tuple[bool, (str | None)]:
         filehash:str = sha256(data).hexdigest()
+        filehash = filehash.strip().replace("\n", "")
 
         file_path = os.path.join(self.__filestore_path, filehash)
 
