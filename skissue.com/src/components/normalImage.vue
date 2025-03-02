@@ -55,8 +55,8 @@ export default defineComponent({
           fetch("https://skissue.com/store/upload/"+ userID, {
             method: 'POST',
             type: 'application/json',
-            body: JSON.stringify({'data': imageSrc.value
-          })}).then(response => {
+            body: /*JSON.stringify(*/{'data': imageSrc.value
+          }/*)*/}).then(response => {
             console.log("Response:", response);
           });
         };
