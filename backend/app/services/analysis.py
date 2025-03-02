@@ -2,6 +2,7 @@ import pickle
 import cv2
 import numpy as np
 from .logs import log
+from ..routers.validation import filestore
 
 with open("app/data/model.pkl", "rb") as f:
     # Load the model
@@ -13,19 +14,16 @@ with open("app/data/model.pkl", "rb") as f:
 MatLike = cv2.typing.MatLike
 
 
-def analyse_image(sat_image_path: str) -> str:
-    """ Perform analysis on the given image data
-
-    Args:
-        sat_image_path (str): Path of sattelite image
-        lidar_image_path (str): Path of LIDAR image - note currently unused
-
-    Returns:
-        dict: Results
-    """
-    
+def analyse_image(sat_image_hash: str) -> str:
     # Load images into memory
-    sat_image: cv2.typing.MatLike = cv2.imread(sat_image_path)
+    
+    # Get file
+    file_data = filestore.get_file(sat_image_hash)
+    if file_data is None:
+        log.error("analyse_image", "Failed to load file")
+    nparr = np.fromstring(file_data, np.uint8)
+
+    sat_image: cv2.typing.MatLike = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     # lidar_image: cv2.typing.MatLike = cv2.imread(lidar_image_path)
 
     # Check if images are loaded
@@ -49,9 +47,7 @@ def analyse_image(sat_image_path: str) -> str:
         2: "Developed/urban",
         3: "Water"
     }
-    return mapping[prediction]
-
-    pass
+    return mapping[prediction] + [green_percent, edge_density, percent_horizontal, percent_vertical]
 
 
 def predict_with_model(green_percent: float, edge_density: float, horizontal_percent: float, vertical_percent: float) -> int:
