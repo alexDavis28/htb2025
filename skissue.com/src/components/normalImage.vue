@@ -55,7 +55,7 @@ export default defineComponent({
           // post the raw image data as multipart/form-data
           const formData = new FormData();
           formData.append('file', file);
-          fetch("https://skissue.com/upload/"+userID, {
+          fetch("https://skissue.com/store/upload/"+userID, {
             method: 'POST',
             body: formData
           }).then(response => {
