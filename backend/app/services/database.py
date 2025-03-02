@@ -131,7 +131,7 @@ class DB:
     def add_user(self, username:str) -> bool:
         suc, _ = self.__execute_for_one("INSERT INTO users (username) VALUES (?)", (username,))
 
-        ret = suc == True
+        ret = suc is not None
         if not ret: log.warn("DB", f"Failed to add user {username}")
         return ret
     

@@ -3,7 +3,7 @@
       <h2 class="header">Optical</h2>
       <div class = "placeholder"></div>
       <button class="confirm-button" @click="confirmUpload">Confirm</button>
-      <h2 class="header">Satellite</h2>
+      <h2 class="header">LIDAR</h2>
       <div class = "placeholder"></div>
       <button class="confirm-button" @click="confirmUpload2">Confirm</button>
     </div>

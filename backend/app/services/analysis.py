@@ -9,7 +9,11 @@ with open("app/data/model.pkl", "rb") as f:
     # Features: Green percent, edge density, horizontal_percent, vertical_percent
     clf = pickle.load(f)
 
-def analyse_image(sat_image_path: str, lidar_image_path: str) -> dict:
+
+MatLike = cv2.typing.MatLike
+
+
+def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
     """ Perform analysis on the given image data
 
     Args:
@@ -44,8 +48,8 @@ def analyse_image(sat_image_path: str, lidar_image_path: str) -> dict:
 def predict_with_model(green_percent: float, edge_density: float, horizontal_percent: float, vertical_percent: float) -> int:
     return int(clf.predict([[green_percent, edge_density, horizontal_percent, vertical_percent]])[0])
 
-
-def proportion_image_white(image: cv2.typing.MatLike) -> float:
+  
+def proportion_image_white(image: MatLike) -> float:
     height, width = image.shape[:2]
     total_pixels = height * width
     count_white = np.count_nonzero(image)
@@ -55,16 +59,16 @@ def percent_green(sat_image: cv2.typing.MatLike):
     # Define the upper and lower HSV thresholds for green
     # Array (H,S,V)
     # https://stackoverflow.com/questions/10948589/choosing-the-correct-upper-and-lower-hsv-boundaries-for-color-detection-withcv/48367205#48367205
-    lower_green = (40, 100, 100)
-    upper_green = (100, 255, 255)
+    lower_green: MatLike= (40, 100, 100) # type: ignore
+    upper_green: MatLike = (100, 255, 255) # type: ignore
 
     # Convert image
     image_hsv = cv2.cvtColor(sat_image, cv2.COLOR_BGR2HSV)
-    mask = cv2.inRange(image_hsv, lower_green, upper_green)
+    mask: MatLike = cv2.inRange(image_hsv, lower_green, upper_green) 
     return proportion_image_white(mask)
 
 
-def average_elevation(lidar_image_path: str) -> float:
+def average_elevation(lidar_image_path: str) -> None:
     pass
 
 def edge_density(sat_image: cv2.typing.MatLike) -> float:
