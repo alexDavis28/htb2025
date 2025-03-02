@@ -2,6 +2,7 @@ import pickle
 import cv2
 import numpy as np
 from .logs import log
+from ..routers.validation import filestore
 
 with open("app/data/model.pkl", "rb") as f:
     # Load the model
@@ -11,39 +12,6 @@ with open("app/data/model.pkl", "rb") as f:
 
 
 MatLike = cv2.typing.MatLike
-
-
-def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
-    """ Perform analysis on the given image data
-
-    Args:
-        sat_image_path (str): Path of sattelite image
-        lidar_image_path (str): Path of LIDAR image
-
-    Returns:
-        dict: Results
-    """
-    
-    # Load images into memory
-    sat_image: cv2.typing.MatLike = cv2.imread(sat_image_path)
-    lidar_image: cv2.typing.MatLike = cv2.imread(lidar_image_path)
-
-    # Check if images are loaded
-    if sat_image is None:
-        log.error("analyse_image", "Satellite image not loaded")
-    if lidar_image is None:
-        log.error("analyse_image", "LIDAR image not loaded")
-        
-    # Perform analyses
-    # percent_green = percent_green(sat_image)
-    # average_elevation = average_elevation(lidar_image)
-    # percent_water = percent_water(sat_image, lidar_image)
-    # edge_density = edge_density(sat_image)
-    # percent_horizontal = percent_horizontal(sat_image)
-    # percent_vertical = percent_vertical(sat_image)
-    # Check against thresholds
-    pass
-
 
 def predict_with_model(green_percent: float, edge_density: float, horizontal_percent: float, vertical_percent: float) -> int:
     return int(clf.predict([[green_percent, edge_density, horizontal_percent, vertical_percent]])[0])
@@ -55,7 +23,7 @@ def proportion_image_white(image: MatLike) -> float:
     count_white = np.count_nonzero(image)
     return count_white / total_pixels
  
-def percent_green(sat_image: cv2.typing.MatLike):
+def percent_green(sat_image: cv2.typing.MatLike) -> float:
     # Define the upper and lower HSV thresholds for green
     # Array (H,S,V)
     # https://stackoverflow.com/questions/10948589/choosing-the-correct-upper-and-lower-hsv-boundaries-for-color-detection-withcv/48367205#48367205
@@ -111,3 +79,47 @@ def percent_vertical(sat_image: cv2.typing.MatLike) -> float:
     vertical = cv2.erode(bw, vertical_structure)
     vertical = cv2.dilate(vertical, vertical_structure)
     return proportion_image_white(vertical)
+
+
+
+def analyse_image(sat_image_hash: str) -> list[float | str]:
+    # Load images into memory
+    
+    # Get file
+    file_data = filestore.get_file(sat_image_hash)
+    if file_data is None:
+        log.critical("analyse_image", "Failed to load file")
+    nparr = np.fromstring(file_data, np.uint8) # type: ignore
+
+    sat_image: cv2.typing.MatLike = cv2.imdecode(nparr, cv2.IMREAD_COLOR) # type: ignore
+    # lidar_image: cv2.typing.MatLike = cv2.imread(lidar_image_path)
+
+    # Check if images are loaded
+    if sat_image is None:
+        log.error("analyse_image", "Satellite image not loaded")
+    # if lidar_image is None:
+    #     log.error("analyse_image", "LIDAR image not loaded")
+        
+    # Perform analyses
+    green_percent = percent_green(sat_image)
+    edge_density_stat = edge_density(sat_image)
+    percent_horizontal_stat = percent_horizontal(sat_image)
+    percent_vertical_stat = percent_vertical(sat_image)
+    
+    # Make prediction
+
+    prediction = predict_with_model(green_percent, edge_density_stat, percent_horizontal_stat, percent_vertical_stat)
+    print(prediction)
+    mapping = {
+        0: "Agricultural/farm",
+        1: "Undeveloped/rural",
+        2: "Developed/urban",
+        3: "Water"
+    }
+    return {
+        "category": mapping[prediction],
+        "green": green_percent,
+        "edge": edge_density_stat,
+        "horizontal": percent_horizontal_stat,
+        "vertical": percent_vertical_stat
+    }

@@ -6,6 +6,26 @@ import ParticleEffect from '../components/ParticleEffect.vue';
 const goToUserFiles = () => {
   window.location.href = 'userFiles.html';
 };
+
+let urlParams = new URLSearchParams(window.location.search);
+var fileHash = urlParams.get('file_hash'); 
+
+const processFile = async () => {
+  console.log(fileHash);
+  const message_response = await fetch("https://skissue.com/analysis/process/" + fileHash, {
+    method: 'POST'
+  });
+  const message_json = await message_response.json();
+  const data = message_json["data"];
+
+  var d = document.createElement("p");
+  d.innerHTML = "Category is " + data["category"] + "." + "<br>Green: " + data["green"] + "<br>Edges: "+ data["edge"] + "<br>Horizontal: " + data["horizontal"] + "<br>Vertical: " + data["vertical"];
+
+  var u = document.getElementById("upper")
+  u?.appendChild(d);
+
+}
+
 </script>
 
 <template>
@@ -14,17 +34,11 @@ const goToUserFiles = () => {
     <h1>Sattelite image analysis</h1>
     <h3>Enhanced image with data analysis.</h3>
   </div>
-  <div class="image-row-upper">
+  <div class="image-row-upper" id="upper">
     <UpperContainer imageDesc="Image 1" boxType="Image" />
-    <UpperContainer imageDesc="Image 2" boxType="Image" />
-    <UpperContainer imageDesc="Graph 1" boxType="Graph" />
-    <UpperContainer imageDesc="Graph 2" boxType="Graph" />
+    <button type="submit" @click="processFile">Process</button>
   </div>
   <br> <!-- Line break -->
-  <div class="image-row-lower">
-    <LowerContainer imageDesc="Image 1" boxType="Image"/>
-    <LowerContainer imageDesc="Graph 3" boxType="Graph"/>
-  </div>
   <div class="top-right-button">
     <button @click="goToUserFiles">User Files</button>
   </div>

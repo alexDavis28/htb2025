@@ -32,27 +32,25 @@ const registerUser = async () => {
       const message_response = await fetch("https://skissue.com/api/signup/"+username.value, {
         method: 'GET'
       });
+      const message_json = await message_response.json()
       console.log("Response:", message_response);
-      if (message_response.status === 200) {
-        window.location.href = "userFiles.html";
-      }
+      window.location.href = "userFiles.html?user_id=" + message_json.user_id;
 
     }
 }
 
 
 const handleLogin = async () => {
-   if (username.value.trim() !== '') {
+   if (username.value.trim() != '') {
     console.log('Logging in:', username.value);
 
       const message_response = await fetch('https://skissue.com/api/login/' + username.value, {
         method: 'GET',
-        credentials: 'include'
       });
+      const message_json = await message_response.json()
       console.log('Response:', message_response);
-      console.log(message_response.headers.getSetCookie())
-      if (message_response.status === 200) {
-        window.location.href = "userFiles.html";
+      if (Object.keys(message_json).length != 0) {
+        window.location.href = "userFiles.html?user_id=" + message_json.user_id;
       }
   }
 };

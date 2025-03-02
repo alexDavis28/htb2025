@@ -16,13 +16,13 @@ defineProps<{
 
 <style scoped>
 .curved-square {
-  width: 250px; /* Width of the square */
-  height: 300px; /* Height of the square */
-  background-color: #222A68; /* Background color of the square */
-  border-radius: 20px; /* Curved corners */
+  width: 250px; 
+  height: 300px;
+  background-color: #222A68;
+  border-radius: 20px; 
   display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
-  margin: 10px; /* Add some margin for spacing */
+  justify-content: center;
+  align-items: center;
+  margin: 10px; 
 }
 </style>
