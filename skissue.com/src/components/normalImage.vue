@@ -46,11 +46,11 @@ const loadFiles = async () => {
   var files = message_json["files"]
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    var d = documente.createElement("div");
+    var d = document.createElement("div");
     d.setAttribute("id", file[1]);
     d.inner_html = file[0];
     d.setAttribute("@click", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
-    document.getElementByID("file-list").appendChild(d);
+    document.getElementById("file-list").appendChild(d);
   }
 }
 

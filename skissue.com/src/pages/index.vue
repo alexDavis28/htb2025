@@ -34,7 +34,7 @@ const registerUser = async () => {
       });
       const message_json = await message_response.json()
       console.log("Response:", message_response);
-      if (message_json !== {}) {
+      if (message_json != {}) {
         window.location.href = "userFiles.html?user_id=" + message_json.user_id;
       }
 
@@ -43,7 +43,7 @@ const registerUser = async () => {
 
 
 const handleLogin = async () => {
-   if (username.value.trim() !== '') {
+   if (username.value.trim() != '') {
     console.log('Logging in:', username.value);
 
       const message_response = await fetch('https://skissue.com/api/login/' + username.value, {
@@ -51,7 +51,7 @@ const handleLogin = async () => {
       });
       const message_json = await message_response.json()
       console.log('Response:', message_response);
-      if (message_response.status !== {}) {
+      if (message_response.status != {}) {
         window.location.href = "userFiles.html?user_id=" + message_json.user_id;
       }
   }
