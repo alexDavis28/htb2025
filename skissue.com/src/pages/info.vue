@@ -19,7 +19,7 @@ const processFile = async () => {
   const data = message_json["data"];
 
   var d = document.createElement("p");
-  d.innerHTML = "Category is " + data[0][0] + "." + "\nGreen, edges, horiontal, vertical readings: " + data[1];
+  d.innerHTML = "Category is " + data["category"] + "." + "<br>Green:" + data["green"] + "<br>Edges:"+ data["edge"] + "<br>Horizontal:" + data["horizontal"] + "<br>Vertical:" + data["vertical"];
 
   var u = document.getElementById("upper")
   u?.appendChild(d);

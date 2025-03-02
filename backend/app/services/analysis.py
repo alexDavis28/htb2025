@@ -109,10 +109,17 @@ def analyse_image(sat_image_hash: str) -> list[float | str]:
     # Make prediction
 
     prediction = predict_with_model(green_percent, edge_density_stat, percent_horizontal_stat, percent_vertical_stat)
+    print(prediction)
     mapping = {
         0: "Agricultural/farm",
         1: "Undeveloped/rural",
         2: "Developed/urban",
         3: "Water"
     }
-    return [mapping[prediction]] + [green_percent, edge_density_stat, percent_horizontal_stat, percent_vertical_stat]
+    return {
+        "category": mapping[prediction],
+        "green": green_percent,
+        "edge": edge_density_stat,
+        "horizontal": percent_horizontal_stat,
+        "vertical": percent_vertical_stat
+    }
