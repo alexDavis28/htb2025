@@ -13,12 +13,12 @@ with open("app/data/model.pkl", "rb") as f:
 MatLike = cv2.typing.MatLike
 
 
-def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
+def analyse_image(sat_image_path: str) -> str:
     """ Perform analysis on the given image data
 
     Args:
         sat_image_path (str): Path of sattelite image
-        lidar_image_path (str): Path of LIDAR image
+        lidar_image_path (str): Path of LIDAR image - note currently unused
 
     Returns:
         dict: Results
@@ -26,22 +26,31 @@ def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
     
     # Load images into memory
     sat_image: cv2.typing.MatLike = cv2.imread(sat_image_path)
-    lidar_image: cv2.typing.MatLike = cv2.imread(lidar_image_path)
+    # lidar_image: cv2.typing.MatLike = cv2.imread(lidar_image_path)
 
     # Check if images are loaded
     if sat_image is None:
         log.error("analyse_image", "Satellite image not loaded")
-    if lidar_image is None:
-        log.error("analyse_image", "LIDAR image not loaded")
+    # if lidar_image is None:
+    #     log.error("analyse_image", "LIDAR image not loaded")
         
     # Perform analyses
-    # percent_green = percent_green(sat_image)
-    # average_elevation = average_elevation(lidar_image)
-    # percent_water = percent_water(sat_image, lidar_image)
-    # edge_density = edge_density(sat_image)
-    # percent_horizontal = percent_horizontal(sat_image)
-    # percent_vertical = percent_vertical(sat_image)
-    # Check against thresholds
+    green_percent = percent_green(sat_image)
+    edge_density = edge_density(sat_image)
+    percent_horizontal = percent_horizontal(sat_image)
+    percent_vertical = percent_vertical(sat_image)
+    
+    # Make prediction
+
+    prediction = predict_with_model(green_percent, edge_density, percent_horizontal, percent_vertical)
+    mapping = {
+        0: "Agricultural/farm",
+        1: "Undeveloped/rural",
+        2: "Developed/urban",
+        3: "Water"
+    }
+    return mapping[prediction]
+
     pass
 
 
