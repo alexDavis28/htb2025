@@ -19,6 +19,7 @@ import imageUploadfrom from '../components/ImageUpload.vue'
   </div>
 </template>
 
+
 <style scoped>
 :global(body) {
   background-color: #0F132E;
