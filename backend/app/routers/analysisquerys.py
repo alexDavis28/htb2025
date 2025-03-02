@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 @router.post("/process/{file_hash}")
-def process_file(file_hash: str, request: Request, response: Response):
+def process_file(file_hash: str):
     log.debug("Analysis", f"{file_hash}")
     a = __import__("base64").b64encode(bytes(file_hash))
     print(a.deocde("utf-8"))
