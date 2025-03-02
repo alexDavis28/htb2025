@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import dbquerys, filestorequerys
+from .routers import filestorequerys, dbquerys
 
 app = FastAPI()
 
