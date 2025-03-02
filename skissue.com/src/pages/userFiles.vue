@@ -9,7 +9,7 @@ import ParticleEffect from '../components/ParticleEffect.vue';
 <template>
   <ParticleEffect />
   <div class="title">
-    <h1>Skissue.com</h1>
+    <h1>Sattelite image analysis</h1>
     <h3>Upload images, then select optical then satellite images to recieve an enhanced image.</h3>
   </div>
   <div class="image-row-upper">
@@ -17,7 +17,7 @@ import ParticleEffect from '../components/ParticleEffect.vue';
     <imageUploadfrom/>
   </div>
   <div class="top-right-text">
-    <p>Top Right Text</p>
+    <p></p>
   </div>
 </template>
 
