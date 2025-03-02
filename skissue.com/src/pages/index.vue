@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ParticleEffect from '../components/ParticleEffect.vue';
-const $cookies = inject<VueCookies>('$cookies'); 
+const $cookies = inject('$cookies');
 
 const username = ref('');
 console.log(username);
