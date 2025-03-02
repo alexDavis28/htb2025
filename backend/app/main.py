@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from .routers import dbquerys, filestorequerys
-from fastapi.middleware import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
 
