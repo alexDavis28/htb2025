@@ -15,5 +15,6 @@ router = APIRouter(
 @router.post("/process/{file_hash}")
 def process_file(file_hash: str, request: Request, response: Response):
     log.debug("Analysis", f"{file_hash}")
+    file_hash = file_hash.strip().replace("\n", "")
     result = analysis.analyse_image(file_hash)
     return {"data": result}
