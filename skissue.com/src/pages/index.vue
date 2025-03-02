@@ -46,9 +46,11 @@ const handleLogin = async () => {
     console.log('Logging in:', username.value);
 
       const message_response = await fetch('https://skissue.com/api/login/' + username.value, {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
       });
       console.log('Response:', message_response);
+      console.log(message_response.headers.getSetCookie())
       if (message_response.status === 200) {
         window.location.href = "userFiles.html";
       }
