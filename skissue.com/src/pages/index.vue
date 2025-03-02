@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ParticleEffect from '../components/ParticleEffect.vue';
-const $cookies = inject('$cookies');
 
 const username = ref('');
 console.log(username);
@@ -54,7 +53,6 @@ const handleLogin = async () => {
       console.log(message_response.headers.getSetCookie())
       if (message_response.status === 200) {
         window.location.href = "userFiles.html";
-        $cookies.set("user", "test");
       }
   }
 };

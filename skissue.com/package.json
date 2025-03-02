@@ -14,8 +14,7 @@
   },
   "dependencies": {
     "particles.js": "2.0.0",
-    "vue": "^3.5.13",
-    "vue-cookies": "^1.8.6"
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",
