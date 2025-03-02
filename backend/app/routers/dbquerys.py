@@ -14,25 +14,35 @@ router = APIRouter(
 )
 
 
+@router.get("/signup/{username}")
+async def signup(username: str, response: Response):
+    log.debug("Signup", f"Signing up {username}")
+    if db.add_user(username):
+        log.debug("Signup", f"User {username} created")
+        return RedirectResponse(url="/public/userFiles.html", status_code=status.HTTP_302_FOUND)
+    else:
+        log.debug("Signup", f"User {username} already exists")
+
+
 @router.get("/login/{username}")
 async def login(username: str, response: Response):
     log.debug("Login", f"Logging in {username}")
     user_id = db.get_user_id(username)
     if user_id is None: raise HTTPException(status_code=404, detail="User not found")
     response.set_cookie(key="UID", value=str(user_id))
-    return RedirectResponse(url="/filelist", status_code=status.HTTP_302_FOUND)
+    return RedirectResponse(url="/public/userFiles.html", status_code=status.HTTP_302_FOUND)
 
 @router.get("logout")
 async def logout(response: Response):
     response.delete_cookie("UID")
-    return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    return RedirectResponse(url="/public/index.html", status_code=status.HTTP_302_FOUND)
 
 @router.get("/filelist")
 async def filelist(request: Request, response: Response):
     UID = UID_validate(request, response)
     if UID is None: 
         log.debug("FileList", "Invalid UID")
-        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+        return RedirectResponse(url="/public/index.html", status_code=status.HTTP_302_FOUND)
 
     log.debug("FileList", f"Getting file list for {UID}")
 
