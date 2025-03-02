@@ -52,10 +52,10 @@ export default defineComponent({
         reader.onload = (e) => {
           imageSrc.value = (e.target as FileReader).result as string;
           console.log("Image URL:", imageSrc.value); 
-          fetch("https://skissue.com/api/store/upload/"+ user_id, {
+          fetch("https://skissue.com/api/store/upload/"+ userID, {
             method: 'POST',
-            body: JSON.stringify({'data': imageSrc.value,
-          }).then(response => {
+            body: JSON.stringify({'data': imageSrc.value
+          })}).then(response => {
             console.log("Response:", response);
           });
         };
