@@ -1,13 +1,12 @@
 from fastapi import FastAPI
-from .conf import CONFIG
-from .services.logs import Logger
-
-log = Logger()
+from .routers import dbquerys, filestorequerys
 
 app = FastAPI()
 
-# app.include_router()
+app.include_router(dbquerys.router)
+app.include_router(filestorequerys.router)
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World!"}
+async def root():
+    return "Hello world!"
+    # return RedirectResponse(url="/public/", status_code=301)

@@ -24,3 +24,5 @@ class Logger:
 
     def critical(self, module: str, msg: str) -> None:
         self.__log("C", module, msg)
+
+log = Logger()
