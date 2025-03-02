@@ -3,7 +3,7 @@
     <div class="header-container">
       <h2 class="header">User files</h2>
       <button class="center-button" @click="triggerFileInput">Upload</button>
-      <button class="center-button" @click="loadFiles">Refresh</button>
+      <button class="center-button" @click="loadFiles()">Refresh</button>
     </div>
     <input type="file" ref="fileInput" @change="handleFileChange" class="file-input" />
     <div class="curved-square">
@@ -51,7 +51,7 @@ const loadFiles = async () => {
     d.innerHTML = file[0];
     d.setAttribute("@click", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
     var list = document.getElementById("file-list");
-    list.appendChild(d);
+    list?.appendChild(d);
   }
 }
 

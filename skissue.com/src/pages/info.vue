@@ -21,7 +21,7 @@ const processFile = async () => {
   d.innerHTML = "Category is " + data[0][0] + "." + "\nGreen, edges, horiontal, vertical readings: " + data[1];
 
   var u = document.getElementById("upper")
-  u.appendChild(d);
+  u?.appendChild(d);
 
 }
 
