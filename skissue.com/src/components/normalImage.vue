@@ -8,7 +8,6 @@
     <input type="file" ref="fileInput" @change="handleFileChange" class="file-input" />
     <div class="curved-square">
       <div class="scrollable-content" id="file-list">
-        <div class="individualTile">asd</div>
       </div>
     </div>
   </div>
@@ -32,6 +31,7 @@ export const loadFiles = async () => {
     d.setAttribute("id", file[1]);
     d.innerHTML = file[0];
     d.setAttribute("@click", "window.location.href = '/public/info.html?file_hash=" + file[1] + "'");    
+    d.setAttribute("class", "individualTile");
     var list = document.getElementById("file-list");
     list?.appendChild(d);
   }
