@@ -1,11 +1,7 @@
-from fastapi import HTTPException, Response, Request, APIRouter
-from fastapi.responses import RedirectResponse
-from fastapi import status
-from pydantic import BaseModel
+from fastapi import Response, Request, APIRouter
 
-from base64 import urlsafe_b64decode, urlsafe_b64encode
 
-from .validation import UID_validate, db, filestore
+from .validation import UID_validate, db, filestore # type: ignore
 from ..services.logs import log
 
 
@@ -19,9 +15,6 @@ router = APIRouter(
 
 @router.post("/green_percent/{file_hash}") 
 def green_percent(request: Request, response: Response):
-    UID = UID_validate(request, response)
-    if UID is None: 
-        log.debug("GreenPercent", "Invalid UID")
-        return RedirectResponse(url="/public/index.html", status_code=status.HTTP_302_FOUND)
-
-    
+    log.debug("Analysis", f"Green percent request {request}")
+    log.debug("Analysis", f"Green percent response {response}")
+    return {"green_percent": 0.5}

@@ -1,11 +1,11 @@
-from fastapi import HTTPException, Response, Request, APIRouter
-from fastapi.responses import RedirectResponse
-from fastapi import status
+from fastapi import Response, Request, APIRouter
 from pydantic import BaseModel
+
+from typing import Dict, Any
 
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 
-from .validation import UID_validate, db, filestore
+from .validation import db, filestore
 from ..services.logs import log
 
 
@@ -18,10 +18,10 @@ router = APIRouter(
 
 
 @router.get("/{item_hash}")
-async def read_item(item_hash: str):
+async def read_item(item_hash: str) -> Dict[Any, Any]:
     log.debug("Store", f"Getting file {item_hash}")
     file_data = filestore.get_file(item_hash)
-    if file_data is None: raise HTTPException(status_code=404, detail="Item not found")
+    if file_data is None: return {}
     return {"data": urlsafe_b64encode(file_data).decode()}
 
 class UploadData(BaseModel):
@@ -29,37 +29,35 @@ class UploadData(BaseModel):
     data: str
 
 
-@router.post("/upload")
-async def create_upload(request: Request, response: Response, data: UploadData):
+@router.post("/upload/{user_id}")
+async def create_upload(user_id:str, request: Request, response: Response, data: UploadData) -> Dict[Any, Any]:
     log.debug("Upload", f"request {request}")
     log.debug("Upload", f"response {response}")
     log.debug("Upload", f"data {data}")
 
-
-
-    # UID validation
-    UID = UID_validate(request, response)
-    if UID is None: 
-        log.debug("Upload", "Invalid UID")
-        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    username = db.get_user_name(int(user_id))
+    if username is None:
+        log.debug("Upload", f"User {user_id} not found")
+        return {}
+    
 
     # File decode
     raw  = urlsafe_b64decode(data.data)
     if raw == b"": 
         log.debug("Upload", "Invalid base64 data")
-        raise HTTPException(status_code=400, detail="Invalid base64 data")
+        return {}
     
     # File save 
     success, file_hash = filestore.save_file(raw)
     if file_hash is None: 
         log.debug("Upload", "Failed to save file")
-        raise HTTPException(status_code=500, detail="Failed to save file")
+        return {}
     
     # validate savev
     if success:
         if not db.add_file_record(data.name, file_hash):
             log.critical("Upload", "Failed to add file record")
-            raise HTTPException(status_code=500, detail="Failed to add file record")
+            return {}
         log.debug("Upload", f"Added file record {data.name}")
     else:
         log.debug("Upload", f"File '{data.name}' already exists")
@@ -68,12 +66,12 @@ async def create_upload(request: Request, response: Response, data: UploadData):
     FID = db.get_file_id(file_hash)
     if FID is None:
         log.critical("Upload", f"Failed to get file_id of uploaded file {file_hash}")
-        raise HTTPException(status_code=500, detail="Failed to get file_id of uploaded file")
+        return {}
 
     # Add file to user
-    if not db.add_user_file(UID, FID):
-        log.critical("Upload", f"Failed to add file {file_hash} to user {UID}")
-        raise HTTPException(status_code=500, detail="Failed to add file to user")
+    if not db.add_user_file(int(user_id), FID):
+        log.critical("Upload", f"Failed to add file {file_hash} to user {user_id}")
+        return {}
 
 
     return {"file_hash": file_hash}
