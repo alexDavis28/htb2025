@@ -1,9 +1,16 @@
 import cv2
 import numpy as np
 from .logs import log
-
+from pickle import load
 
 MatLike = cv2.typing.MatLike
+
+def classify(chunk: MatLike, clf) -> int:
+    green = percent_green(chunk)
+    edge_density = edge_density(chunk)
+    horiz = percent_horizontal(chunk)
+    verti = percent_vertical()
+    return clf.predict([green, edge_density, horiz, verti])
 
 
 def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
@@ -26,6 +33,25 @@ def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
         log.error("analyse_image", "Satellite image not loaded")
     if lidar_image is None:
         log.error("analyse_image", "LIDAR image not loaded")
+
+    # Retrieve model
+    m = open("model.pkl", 'rb') # need to train the model first
+    clf = load(m)
+    m.close()
+
+    # Split image into chunks
+    chunks = []
+    chunk_size = 50
+    for i in range(0, sat_image.shape[0], chunk_size):
+        row = []
+        for j in range(0, sat_image.shape[1], chunk_size):
+            row.append(sat_image[i:i+chunk_size, j:j+chunk_size])
+        chunks.append(row)
+
+    for row in chunks:
+        for c in row: # placeholder for now
+            print(classify(c))
+    
         
     # Perform analyses
     # percent_green = percent_green(sat_image)
@@ -80,8 +106,6 @@ def percent_horizontal(sat_image: MatLike) -> float:
     
     horizontal = cv2.erode(bw, horizontal_structure)
     horizontal = cv2.dilate(horizontal, horizontal_structure)
-
-    # cv2.imshow("horizontal", horizontal);cv2.waitKey();cv2.destroyAllWindows()
     return proportion_image_white(horizontal)
 
 def percent_vertical(sat_image: MatLike) -> float:
