@@ -10,4 +10,4 @@ COPY ./poetry.lock /code/poetry.lock
 RUN poetry install
 
 COPY . /code
-CMD ["./docker-entrypoint.sh"]
+CMD ["poetry", "run", "fastapi", "run", "app", "--port", "80"]
