@@ -11,7 +11,7 @@ const goToUserFiles = () => {
 <template>
   <ParticleEffect />
   <div class="title">
-    <h1>Skissue.com</h1>
+    <h1>Sattelite image analysis</h1>
     <h3>Enhanced image with data analysis.</h3>
   </div>
   <div class="image-row-upper">
