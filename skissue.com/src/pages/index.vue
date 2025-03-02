@@ -53,6 +53,7 @@ const handleLogin = async () => {
       console.log(message_response.headers.getSetCookie())
       if (message_response.status === 200) {
         window.location.href = "userFiles.html";
+        $cookies.set("user", "test");
       }
   }
 };
