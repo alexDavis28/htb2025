@@ -23,7 +23,7 @@ export const loadFiles = async () => {
     method: 'GET'
   });
   const message_json = await message_response.json();
-  console.log("Response:", message_json);
+  console.log("Response:", message_json); 
   var files = message_json["files"];
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
@@ -52,7 +52,7 @@ export default defineComponent({
         reader.onload = (e) => {
           imageSrc.value = (e.target as FileReader).result as string;
           console.log("Image URL:", imageSrc.value); 
-          fetch("https://skissue.com/api/store/upload/"+ userID, {
+          fetch("https://skissue.com/store/upload/"+ userID, {
             method: 'POST',
             body: JSON.stringify({'data': imageSrc.value
           })}).then(response => {
