@@ -24,9 +24,9 @@ export const loadFiles = async () => {
   const message_response = await fetch("https://skissue.com/api/filelist/"+userID, {
     method: 'GET'
   });
-  const message_json = await message_response.json()
+  const message_json = await message_response.json();
 
-  var files = message_json["files"]
+  var files = message_json["files"];
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     var d = document.createElement("div");
@@ -37,6 +37,9 @@ export const loadFiles = async () => {
     list?.appendChild(d);
   }
 }
+
+window.onload = loadFiles;
+
 export default defineComponent({
   setup() {
     const imageSrc = ref<string | null>(null);
