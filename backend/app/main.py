@@ -17,7 +17,7 @@ app.add_middleware(
 
 app.include_router(dbquerys.router)
 app.include_router(filestorequerys.router)
-app.include_router(analysisquerys)
+app.include_router(analysisquerys.router)
 
 @app.get("/")
 async def root():
