@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import dbquerys, filestorequerys
+from .routers import dbquerys, filestorequerys, analysisquerys
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -17,6 +17,7 @@ app.add_middleware(
 
 app.include_router(dbquerys.router)
 app.include_router(filestorequerys.router)
+app.include_router(analysisquerys)
 
 @app.get("/")
 async def root():
