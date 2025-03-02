@@ -15,8 +15,5 @@ router = APIRouter(
 @router.post("/process/{file_hash}")
 def process_file(file_hash: str):
     log.debug("Analysis", f"{file_hash}")
-    a = __import__("base64").b64encode(bytes(file_hash))
-    print(a.deocde("utf-8"))
-    file_hash = file_hash.strip().replace("\n", "")
     result = analysis.analyse_image(file_hash)
     return {"data": result}
