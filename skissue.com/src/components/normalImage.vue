@@ -19,7 +19,7 @@
 import { defineComponent, ref } from 'vue';
 
 let urlParams = new URLSearchParams(window.location.search);
-var userID = urlParams.has('user_id'); 
+var userID = urlParams.get('user_id'); 
 export const loadFiles = async () => {
   const message_response = await fetch("https://skissue.com/api/filelist/"+userID, {
     method: 'GET'

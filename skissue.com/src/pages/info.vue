@@ -8,7 +8,7 @@ const goToUserFiles = () => {
 };
 
 let urlParams = new URLSearchParams(window.location.search);
-var fileHash = urlParams.has('file_hash'); 
+var fileHash = urlParams.get('file_hash'); 
 
 const processFile = async () => {
   const message_response = await fetch("https://skissue.com/api/analysis/processFile/" + fileHash, {
