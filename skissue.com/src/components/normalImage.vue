@@ -52,13 +52,17 @@ export default defineComponent({
         reader.onload = (e) => {
           imageSrc.value = (e.target as FileReader).result as string;
           console.log("Image URL:", imageSrc.value); 
-          fetch("https://skissue.com/store/upload/"+ userID, {
+          // post the raw image data as multipart/form-data
+          const formData = new FormData();
+          formData.append('file', file);
+          fetch("https://skissue.com/upload/"+userID, {
             method: 'POST',
-            type: 'application/json',
-            body: /*JSON.stringify(*/{'data': imageSrc.value
-          }/*)*/}).then(response => {
+            body: formData
+          }).then(response => {
             console.log("Response:", response);
+            loadFiles();
           });
+
         };
         reader.readAsDataURL(file);
       }

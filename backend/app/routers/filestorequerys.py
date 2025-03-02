@@ -1,9 +1,9 @@
-from fastapi import Response, Request, APIRouter
+from fastapi import Response, UploadFile, APIRouter
 from pydantic import BaseModel
 
 from typing import Dict, Any
 
-from base64 import urlsafe_b64decode, urlsafe_b64encode
+from base64 import urlsafe_b64encode
 
 from .validation import db, filestore
 from ..services.logs import log
@@ -30,22 +30,15 @@ class UploadData(BaseModel):
 
 
 @router.post("/upload/{user_id}")
-async def create_upload(user_id:str, request: Request, response: Response, data: UploadData) -> Dict[Any, Any]:
-    log.debug("Upload", f"request {request}")
-    log.debug("Upload", f"response {response}")
-    log.debug("Upload", f"data {data}")
+async def create_upload(user_id:str, file: UploadFile, response: Response) -> Dict[Any, Any]:
+    if file.filename is None: return {}
 
     username = db.get_user_name(int(user_id))
     if username is None:
         log.debug("Upload", f"User {user_id} not found")
         return {}
-    
 
-    # File decode
-    raw  = urlsafe_b64decode(data.data)
-    if raw == b"": 
-        log.debug("Upload", "Invalid base64 data")
-        return {}
+    raw = file.file.read()
     
     # File save 
     success, file_hash = filestore.save_file(raw)
@@ -55,12 +48,12 @@ async def create_upload(user_id:str, request: Request, response: Response, data:
     
     # validate savev
     if success:
-        if not db.add_file_record(data.name, file_hash):
+        if not db.add_file_record(file.filename, file_hash):
             log.critical("Upload", "Failed to add file record")
             return {}
-        log.debug("Upload", f"Added file record {data.name}")
+        log.debug("Upload", f"Added file record {file.filename}")
     else:
-        log.debug("Upload", f"File '{data.name}' already exists")
+        log.debug("Upload", f"File '{file.filename}' already exists")
     
     # get generated FID
     FID = db.get_file_id(file_hash)
