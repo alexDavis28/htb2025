@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 
 let urlParams = new URLSearchParams(window.location.search);
