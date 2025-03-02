@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UpperContainer from '../components/UpperContainer.vue'
 import LowerContainer from '../components/LowerContainer.vue';
+import ParticleEffect from '../components/ParticleEffect.vue';
 
 const goToUserFiles = () => {
   window.location.href = 'userFiles.html';
@@ -8,6 +9,7 @@ const goToUserFiles = () => {
 </script>
 
 <template>
+  <ParticleEffect />
   <div class="title">
     <h1>Skissue.com</h1>
     <h3>Enhanced image with data analysis.</h3>

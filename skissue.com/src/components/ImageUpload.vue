@@ -68,7 +68,7 @@ const confirmUpload2 = () => {
   .placeholder {
   width: 175px; /* Width of the placeholder */
   height: 175px; /* Height of the placeholder */
-  background-color: #000000; /* Black background color */
+  background-color: #44255e; /* Black background color */
   border-radius: 20px; /* Curved corners */
   display: flex;
   position: relative;
@@ -87,7 +87,7 @@ const confirmUpload2 = () => {
   position: relative;
   left: 150px;
   padding: 10px 20px; /* Button padding */
-  background-color: #4CAF50; /* Button background color */
+  background-color: #AB81CD; /* Button background color */
   color: white; /* Button text color */
   border: none; /* Remove default border */
   border-radius: 5px; /* Rounded corners */
@@ -96,7 +96,7 @@ const confirmUpload2 = () => {
 }
 
 .confirm-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #E2ADF2; /* Darker green on hover */
 }
 
 .file-input {

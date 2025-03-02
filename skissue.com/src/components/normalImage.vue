@@ -94,7 +94,7 @@ export default defineComponent({
 .center-button {
   position: relative;
   padding: 10px 20px; /* Button padding */
-  background-color: #4CAF50; /* Button background color */
+  background-color: #AB81CD; /* Button background color */
   color: white; /* Button text color */
   border: none; /* Remove default border */
   border-radius: 5px; /* Rounded corners */
@@ -103,7 +103,7 @@ export default defineComponent({
 }
 
 .center-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #E2ADF2; /* Darker green on hover */
 }
 
 .file-input {

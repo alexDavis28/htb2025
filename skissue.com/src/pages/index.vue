@@ -1,36 +1,38 @@
 <template>
-  <div class="login-container">
-    <div class="title">
-      <h1>Skissue.com</h1>
-    </div>
-    <div class="login-box">
-      <h2>Login</h2>
-      <form @submit.prevent="handleLogin">
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required />
+  <div id="app">
+    <ParticleEffect />
+    <div class="login-container">
+      <div class="title">
+        <h1>Skissue.com</h1>
+      </div>
+      <div class="login-box">
+        <h2>Login</h2>
+        <form @submit.prevent="handleLogin">
+          <label for="username">Username:</label>
+          <input type="text" id="username" v-model="username" required />
 
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
+import ParticleEffect from '../components/ParticleEffect.vue';
 
-const username = ref("");
+const username = ref('');
 
 const handleLogin = async () => {
-  if (username.value.trim() !== "") {
-    console.log("Logging in:", username.value);
-    window.location.href = "userFiles.html";
+  if (username.value.trim() !== '') {
+    console.log('Logging in:', username.value);
+    window.location.href = 'userFiles.html';
 
-    const message_response = await fetch("/api/login/"+username.value, {
-      method: "GET",
+    const message_response = await fetch('/api/login/' + username.value, {
+      method: 'GET'
     });
-    console.log("Response:", message_response);
-  } else {
-    console.log("Username is empty");
+    console.log('Response:', message_response);
   }
 };
 </script>
@@ -44,6 +46,17 @@ const handleLogin = async () => {
   align-items: center;
   height: 100vh;
 }
+
+
+#particles-canvas {
+  position: absolute;
+  left: 0px;
+  top: 100px;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Ensure particles are behind other content */
+}
+
 
 .login-container {
   position: absolute;
@@ -70,13 +83,16 @@ const handleLogin = async () => {
   width: 300px;
 }
 
+.login-box h2 {
+  margin-bottom: 20px;
+}
+
 .login-box form {
   display: flex;
   flex-direction: column;
 }
 
 .login-box label {
-  font-size: 1.0rem;
   margin-bottom: 5px;
   text-align: left;
 }
@@ -90,7 +106,7 @@ const handleLogin = async () => {
 
 .login-box button {
   padding: 10px;
-  background-color: #AB81CD;
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 5px;
@@ -98,7 +114,7 @@ const handleLogin = async () => {
 }
 
 .login-box button:hover {
-  background-color: #AB81CD;
+  background-color: #45a049;
 }
 
 .login-box a {
@@ -107,7 +123,6 @@ const handleLogin = async () => {
   color: #4CAF50;
   text-decoration: none;
 }
-
 
 .login-box a:hover {
   text-decoration: underline;
@@ -124,5 +139,4 @@ h2 {
   margin-bottom: 10px;
   color: #222A68;
 }
-
 </style>
