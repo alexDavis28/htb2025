@@ -11,7 +11,17 @@ let urlParams = new URLSearchParams(window.location.search);
 var fileHash = urlParams.has('file_hash'); 
 
 const processFile = async () => {
-  
+  const message_response = await fetch("https://skissue.com/api/analysis/processFile/" + fileHash, {
+    method: 'POST'
+  });
+  const message_json = await message_response.json();
+  const data = message_json["data"];
+
+  var p = document.createElement("p");
+  d.inner_html = "Category is " + data[0][0] + "." + "\nGreen, edges, horiontal, vertical readings: " + data[1];
+
+  document.getElementByID("upper").appendChild(d);
+
 }
 
 </script>
@@ -22,7 +32,7 @@ const processFile = async () => {
     <h1>Sattelite image analysis</h1>
     <h3>Enhanced image with data analysis.</h3>
   </div>
-  <div class="image-row-upper">
+  <div class="image-row-upper" id="upper">
     <UpperContainer imageDesc="Image 1" boxType="Image" />
     <button type="submit" @click="processFile">Process</button>
   </div>
