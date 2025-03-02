@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from .logs import log
 
-with open("model.pkl", "rb") as f:
+with open("app/data/model.pkl", "rb") as f:
     # Load the model
     # Predict: Category 0 Agricultural land 1 Countryside 2 Urban 3 Water
     # Features: Green percent, edge density, horizontal_percent, vertical_percent
@@ -42,7 +42,7 @@ def analyse_image(sat_image_path: str, lidar_image_path: str) -> dict:
 
 
 def predict_with_model(green_percent: float, edge_density: float, horizontal_percent: float, vertical_percent: float) -> int:
-    return clf.prediict([[green_percent, edge_density, horizontal_percent, vertical_percent]])[0]
+    return int(clf.predict([[green_percent, edge_density, horizontal_percent, vertical_percent]])[0])
 
 
 def proportion_image_white(image: cv2.typing.MatLike) -> float:
