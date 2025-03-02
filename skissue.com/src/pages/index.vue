@@ -10,8 +10,9 @@
         <form @submit.prevent="handleLogin">
           <label for="username">Username:</label>
           <input type="text" id="username" v-model="username" required />
-
           <button type="submit">Login</button>
+          <br>
+          <button type="submit" @click="registerUser()">Register</button>
         </form>
       </div>
     </div>
@@ -25,18 +26,32 @@ import ParticleEffect from '../components/ParticleEffect.vue';
 const username = ref('');
 console.log(username);
 
+const registerUser = async () => {
+    if (username.value.trim() !== '') {
+      console.log('Registering:', username.value);
+      const message_response = await fetch("https://skissue.com/api/signup/"+username.value, {
+        method: 'GET'
+      });
+      console.log("Response:", message_response);
+      if (message_response.status === 200) {
+        window.location.href = "userFiles.html";
+      }
+
+    }
+}
+
+
 const handleLogin = async () => {
-  console.log("krill");
-  if (username.value.trim() !== '') {
+   if (username.value.trim() !== '') {
     console.log('Logging in:', username.value);
 
-    const message_response = await fetch('https://skissue.com/api/login/' + username.value, {
-      method: 'GET'
-    });
-    console.log('Response:', message_response);
-    if (message_response.status === 200) {
-      window.location.href = "userFiles.html";
-    }
+      const message_response = await fetch('https://skissue.com/api/login/' + username.value, {
+        method: 'GET'
+      });
+      console.log('Response:', message_response);
+      if (message_response.status === 200) {
+        window.location.href = "userFiles.html";
+      }
   }
 };
 </script>
