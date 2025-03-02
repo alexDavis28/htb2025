@@ -1,5 +1,5 @@
 from fastapi import Response, Request, APIRouter
-
+from ..services import analysis
 
 from .validation import UID_validate, db, filestore # type: ignore
 from ..services.logs import log
@@ -12,9 +12,8 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-
-@router.post("/green_percent/{file_hash}") 
-def green_percent(request: Request, response: Response):
-    log.debug("Analysis", f"Green percent request {request}")
-    log.debug("Analysis", f"Green percent response {response}")
-    return {"green_percent": 0.5}
+@router.post("/process/{file_hash}")
+def process_file(file_hash: str, request: Request, response: Response):
+    log.debug("Analysis", f"{file_hash}")
+    result = analysis.analyse_image(file_hash)
+    return {"data": result}

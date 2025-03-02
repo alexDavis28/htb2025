@@ -90,16 +90,16 @@ const confirmUpload2 = () => {
   background-color: #AB81CD; /* Button background color */
   color: white; /* Button text color */
   border: none; /* Remove default border */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin-top: 10px; /* Add some margin above the button */
+  border-radius: 5px;
+  cursor: pointer; 
+  margin-top: 10px;
 }
 
 .confirm-button:hover {
-  background-color: #E2ADF2; /* Darker green on hover */
+  background-color: #E2ADF2;
 }
 
 .file-input {
-  display: none; /* Hide the file input */
+  display: none;
 }
   </style>

@@ -81,7 +81,7 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      init(); // Reinitialize particles to fit the new canvas size
+      init(); 
     });
   });
   </script>
@@ -93,6 +93,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Ensure particles are behind other content */
+    z-index: -1; 
   }
   </style>

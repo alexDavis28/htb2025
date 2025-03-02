@@ -6,6 +6,14 @@ import ParticleEffect from '../components/ParticleEffect.vue';
 const goToUserFiles = () => {
   window.location.href = 'userFiles.html';
 };
+
+let urlParams = new URLSearchParams(window.location.search);
+var fileHash = urlParams.has('file_hash'); 
+
+const processFile = async () => {
+  
+}
+
 </script>
 
 <template>
@@ -16,15 +24,9 @@ const goToUserFiles = () => {
   </div>
   <div class="image-row-upper">
     <UpperContainer imageDesc="Image 1" boxType="Image" />
-    <UpperContainer imageDesc="Image 2" boxType="Image" />
-    <UpperContainer imageDesc="Graph 1" boxType="Graph" />
-    <UpperContainer imageDesc="Graph 2" boxType="Graph" />
+    <button type="submit" @click="processFile">Process</button>
   </div>
   <br> <!-- Line break -->
-  <div class="image-row-lower">
-    <LowerContainer imageDesc="Image 1" boxType="Image"/>
-    <LowerContainer imageDesc="Graph 3" boxType="Graph"/>
-  </div>
   <div class="top-right-button">
     <button @click="goToUserFiles">User Files</button>
   </div>
