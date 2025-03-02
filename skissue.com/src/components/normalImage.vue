@@ -24,7 +24,7 @@ export loadFiles;
     <div class="header-container">
       <h2 class="header">User files</h2>
       <button class="center-button" @click="triggerFileInput">Upload</button>
-      <button type="submit" class="center-button" @click="loadFiles()">Refresh</button>
+      <button type="submit" class="center-button" onclick="loadFiles()">Refresh</button>
     </div>
     <input type="file" ref="fileInput" @change="handleFileChange" class="file-input" />
     <div class="curved-square">
