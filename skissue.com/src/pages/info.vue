@@ -11,7 +11,8 @@ let urlParams = new URLSearchParams(window.location.search);
 var fileHash = urlParams.get('file_hash'); 
 
 const processFile = async () => {
-  const message_response = await fetch("https://skissue.com/analysis/processFile/" + fileHash, {
+  console.log(fileHash);
+  const message_response = await fetch("https://skissue.com/analysis/process/" + fileHash, {
     method: 'POST'
   });
   const message_json = await message_response.json();
