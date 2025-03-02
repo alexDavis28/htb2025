@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
 from .logs import log
+
+
 MatLike = cv2.typing.MatLike
+
 
 def analyse_image(sat_image_path: str, lidar_image_path: str) -> None:
     """ Perform analysis on the given image data
