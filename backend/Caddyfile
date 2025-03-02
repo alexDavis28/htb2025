@@ -1,0 +1,9 @@
+http://localhost:2883
+{
+    reverse_proxy /public/* :5080
+}
+
+http://localhost:2883
+{
+    reverse_proxy /* :6080
+}
