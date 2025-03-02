@@ -23,7 +23,7 @@ export const loadFiles = async () => {
     method: 'GET'
   });
   const message_json = await message_response.json();
-
+  console.log("Response:", message_json);
   var files = message_json["files"];
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
