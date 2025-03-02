@@ -17,7 +17,7 @@ const loadFiles = async () => {
     list?.appendChild(d);
   }
 }
-export loadFiles
+export loadFiles;
 
   </script>
   <div class="container">
