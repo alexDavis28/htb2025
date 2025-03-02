@@ -3,6 +3,9 @@ import cv2
 import numpy as np
 from .logs import log
 from ..routers.validation import filestore
+from matplotlib import pyplot as plt
+from PIL import Image
+import io
 
 with open("app/data/model.pkl", "rb") as f:
     # Load the model
@@ -100,6 +103,44 @@ def analyse_image(sat_image_hash: str) -> list[float | str]:
     # if lidar_image is None:
     #     log.error("analyse_image", "LIDAR image not loaded")
         
+    
+    # Retrieve model
+    with open("model.pkl", "rb") as file:
+        clf = pickle.load(file)
+
+    # Split image into chunks
+    chunks = []
+    chunk_size = 30
+    for i in range(0, sat_image.shape[0], chunk_size):
+        row = []
+        for j in range(0, sat_image.shape[1], chunk_size):
+            row.append(sat_image[i:i+chunk_size, j:j+chunk_size])
+        chunks.append(row)
+
+    # Classify every chunk
+    chunk_label_pairs = []
+    for row in chunks:
+        r = []
+        for c in row:
+            r.append((c, int(classify(c, clf)[0])))
+            print(int(classify(c, clf)[0]))
+        chunk_label_pairs.append(r)
+    
+    coloured_chunks = []
+    for row in chunk_label_pairs:
+        r = []
+        for ch, l in row:
+            r.append(color_chunk(ch, l))
+        coloured_chunks.append(r)
+
+    final = cv2.vconcat([cv2.hconcat(list_h)  
+                        for list_h in coloured_chunks])
+    final_2 = cv2.cvtColor(final, cv2.COLOR_BGR2RGB)
+    final_pil = Image.fromarray(final_2)
+    final_pil_byte_arr = io.BytesIO()
+    final_pil.save(final_pil_byte_arr, format="PNG")
+    final_pil_byte_arr = final_pil_byte_arr.getvalue()
+
     # Perform analyses
     green_percent = percent_green(sat_image)
     edge_density_stat = edge_density(sat_image)
@@ -121,5 +162,41 @@ def analyse_image(sat_image_hash: str) -> list[float | str]:
         "green": green_percent,
         "edge": edge_density_stat,
         "horizontal": percent_horizontal_stat,
-        "vertical": percent_vertical_stat
+        "vertical": percent_vertical_stat,
+        "image": final_pil_byte_arr
     }
+
+
+def classify(chunk: MatLike, clf) -> int:
+    return clf.predict([[
+        percent_green(chunk),
+        edge_density(chunk),
+        percent_horizontal(chunk),
+        percent_vertical(chunk),
+    ]])
+
+def color_chunk(chunk: MatLike, label: int) -> MatLike:
+    grey = cv2.applyColorMap(chunk, cv2.IMREAD_GRAYSCALE)
+    match label:
+        case 0:
+            return cv2.applyColorMap(grey, get_mpl_colormap("Greens"))
+        case 1:
+            return cv2.applyColorMap(grey, get_mpl_colormap("Oranges"))
+        case 2:
+            return cv2.applyColorMap(grey, get_mpl_colormap("Reds"))
+        case 3:
+            return cv2.applyColorMap(grey, get_mpl_colormap("Blues"))
+        case _:
+            return grey
+
+def get_mpl_colormap(cmap_name):
+    cmap = plt.get_cmap(cmap_name)
+
+    # Initialize the matplotlib color map
+    sm = plt.cm.ScalarMappable(cmap=cmap)
+
+    # Obtain linear color range
+    color_range = sm.to_rgba(np.linspace(0, 1, 256), bytes=True)[:,2::-1]
+
+    return color_range.reshape(256, 1, 3)
+

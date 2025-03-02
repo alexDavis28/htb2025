@@ -11,6 +11,7 @@ python = "^3.11"
 fastapi = {extras = ["standard"], version = "^0.115.10"}
 opencv-python = "^4.11.0.86"
 scikit-learn = "^1.6.1"
+matplotlib = "^3.10.1"
 
 
 [build-system]
